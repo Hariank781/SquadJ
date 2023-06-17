@@ -95,7 +95,7 @@
         app:layout_constraintTop_toBottomOf="@+id/passwordText_registerForm" />
 
     <EditText
-        android:id="@+id/college_registerForm"
+        android:id="@+id/collegeText_registerForm"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="20dp"
@@ -128,7 +128,7 @@
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/college_registerForm" />
+        app:layout_constraintTop_toBottomOf="@+id/collegeText_registerForm" />
 
     <EditText
         android:id="@+id/branchText_registerForm"
