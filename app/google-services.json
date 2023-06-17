@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "368612401574",
+    "project_id": "squadjectfirebase",
+    "storage_bucket": "squadjectfirebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:368612401574:android:313c36bc07730dedcc6f67",
+        "android_client_info": {
+          "package_name": "com.example.squadject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "368612401574-kh4s5v9v32khdv499ts8qk2f5kuvvq88.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.squadject",
+            "certificate_hash": "3565999e72d183a988c32031f9587a0364b30850"
+          }
+        },
+        {
+          "client_id": "368612401574-v0rtpejb5k26db45qei5qv1vkmha60k2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZ9PT9Gv7q0ZtgW25EmiUQKza-9Ytzncs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "368612401574-v0rtpejb5k26db45qei5qv1vkmha60k2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
