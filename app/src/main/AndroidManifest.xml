@@ -15,10 +15,10 @@
         android:theme="@style/Theme.Squadject"
         tools:targetApi="31">
         <activity
-            android:name=".RegisterForm"
+            android:name=".RegisterJoin"
             android:exported="false" />
         <activity
-            android:name=".RegisterJoin"
+            android:name=".Choose"
             android:exported="false" />
         <activity
             android:name=".Login"
@@ -27,7 +27,7 @@
             android:name=".login_register"
             android:exported="false" />
         <activity
-            android:name=".Choose"
+            android:name=".RegisterForm"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

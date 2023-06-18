@@ -14,7 +14,7 @@
         tools:context=".RegisterForm">
 
         <EditText
-            android:id="@+id/needsText_registerForm"
+            android:id="@+id/skillsText_registerForm"
             android:layout_width="0dp"
             android:layout_height="300dp"
             android:layout_marginStart="20dp"
@@ -254,6 +254,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/needsText_registerForm" />
+            app:layout_constraintTop_toBottomOf="@+id/skillsText_registerForm" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
