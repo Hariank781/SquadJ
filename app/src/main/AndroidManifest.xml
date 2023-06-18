@@ -15,40 +15,13 @@
         android:theme="@style/Theme.Squadject"
         tools:targetApi="31">
         <activity
-            android:name=".Password_Change"
-            android:exported="false" />
-        <activity
-            android:name=".Login"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterJoin2"
-            android:exported="false" />
-        <activity
-            android:name=".RegisterForm2"
+            android:name=".RegisterForm"
             android:exported="false" />
         <activity
             android:name=".RegisterJoin"
             android:exported="false" />
         <activity
-            android:name=".RegisterForm"
-            android:exported="false" />
-        <activity
-            android:name=".PhoneNo"
-            android:exported="false" />
-        <activity
-            android:name=".OTP"
-            android:exported="false" />
-        <activity
-            android:name=".OtpJoin"
-            android:exported="false" />
-        <activity
-            android:name=".OtpForm"
-            android:exported="false" />
-        <activity
-            android:name=".PhoneNoJoin"
-            android:exported="false" />
-        <activity
-            android:name=".PhoneNoForm"
+            android:name=".Login"
             android:exported="false" />
         <activity
             android:name=".login_register"
