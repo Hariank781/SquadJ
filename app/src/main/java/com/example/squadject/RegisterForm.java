@@ -2,6 +2,7 @@ package com.example.squadject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,18 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.provider.MediaStore;
+import android.widget.ImageView;
+
+import java.io.File;
+import java.io.IOException;
+
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.yalantis.ucrop.UCrop;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -38,6 +51,12 @@ public class RegisterForm extends AppCompatActivity {
     private Button registerButton;
     private DatabaseReference databaseRef;
     private FirebaseAuth mAuth;
+    private ImageView profilePicImageView;
+
+    private Uri profilePicUri;
+
+    private static final int PICK_IMAGE_REQUEST = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,11 +80,12 @@ public class RegisterForm extends AppCompatActivity {
         nameText = findViewById(R.id.nameText_registerForm);
         uploadButton = findViewById(R.id.upload_registerForm);
         registerButton = findViewById(R.id.register_registerForm);
+        profilePicImageView = findViewById(R.id.profilePic_registerForm);
 
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Add your logic here for the upload button click
+                openImagePicker();
             }
         });
 
@@ -145,9 +165,7 @@ public class RegisterForm extends AppCompatActivity {
 
     private boolean isValidPassword(String password) {
         // Add your password format validation logic here
-        // For example, you can check if the password meets certain criteria (e.g., minimum length, contains uppercase, lowercase, and numbers)
-        // Return true if the password is valid, otherwise return false
-        return password.length() >= 8;  // Example: Password should have at least 8 characters
+        return password.length() >= 8;
     }
 
     private boolean isValidPhoneNumber(String phoneNumber) {
@@ -196,7 +214,7 @@ public class RegisterForm extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             // User registration successful
                                             FirebaseUser user = mAuth.getCurrentUser();
-                                            addUserToDatabase(user, phoneNumber, fullName, email, college, semester, branch, skills);
+                                            addUserToDatabase(user, phoneNumber, fullName, email, college, semester, branch, skills, profilePicUri);
                                             startActivity(new Intent(RegisterForm.this, HomeForm.class));
                                         } else {
                                             // User registration failed
@@ -214,7 +232,7 @@ public class RegisterForm extends AppCompatActivity {
     }
 
     private void addUserToDatabase(FirebaseUser user, String phoneNumber, String fullName, String email, String college,
-                                   String semester, String branch, String skills) {
+                                   String semester, String branch, String skills, Uri profilePicUri) {
         DatabaseReference userRef = databaseRef.child(phoneNumber);
 
         // Set the registration data as key-value pairs under the userRef
@@ -226,7 +244,64 @@ public class RegisterForm extends AppCompatActivity {
         userRef.child("Branch").setValue(branch);
         userRef.child("Skills needed for the project").setValue(skills);
 
+        StorageReference profilePicRef = FirebaseStorage.getInstance().getReference().child("profile_pictures")
+                .child(user.getUid() + ".png");
+
+        profilePicRef.putFile(profilePicUri)
+                .addOnSuccessListener(taskSnapshot -> {
+                    // Get the profile picture download URL
+                    profilePicRef.getDownloadUrl().addOnSuccessListener(uri -> {
+                        String profilePicUrl = uri.toString();
+                        userRef.child("Profile picture").setValue(profilePicUrl);
+                    });
+                })
+                .addOnFailureListener(e -> {
+                    // Profile picture upload failed
+                    Toast.makeText(RegisterForm.this, "Failed to upload profile picture", Toast.LENGTH_SHORT).show();
+                });
         // Optional: Display a success toast message
         Toast.makeText(RegisterForm.this, "User registration successful", Toast.LENGTH_SHORT).show();
+    }
+
+    private void openImagePicker() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
+            Uri selectedImageUri = data.getData();
+            profilePicUri = selectedImageUri;
+
+            // Start the image cropping activity
+            UCrop.Options options = new UCrop.Options();
+            options.setToolbarColor(ContextCompat.getColor(this, R.color.black));
+            options.setStatusBarColor(ContextCompat.getColor(this, R.color.black));
+            options.setToolbarWidgetColor(ContextCompat.getColor(this, R.color.white));
+            options.setCompressionFormat(Bitmap.CompressFormat.PNG);
+            options.setCompressionQuality(90);
+            options.setCircleDimmedLayer(true);
+            options.setShowCropGrid(true);
+
+            UCrop uCrop = UCrop.of(selectedImageUri, Uri.fromFile(new File(getCacheDir(), "cropped_image")));
+            uCrop.withOptions(options);
+            uCrop.start(RegisterForm.this);
+        } else if (requestCode == UCrop.REQUEST_CROP && resultCode == Activity.RESULT_OK && data != null) {
+            Uri croppedImageUri = UCrop.getOutput(data);
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), croppedImageUri);
+                profilePicImageView.setImageBitmap(bitmap);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (resultCode == UCrop.RESULT_ERROR && data != null) {
+            Throwable cropError = UCrop.getError(data);
+            Toast.makeText(this, "Image cropping failed: " + cropError.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 }
