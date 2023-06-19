@@ -2,6 +2,7 @@ package com.example.squadject;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -24,21 +25,19 @@ public class login_register extends AppCompatActivity {
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle sign in button click
-                // Add your code here
+                startActivity(new Intent(login_register.this, Login.class));
             }
         });
 
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Handle register button click
-                // Add your code here
+                startActivity(new Intent(login_register.this, Choose.class));
             }
         });
     }
     @Override
     public void onBackPressed() {
-        // Do nothing to disable the back button
+        finish();
     }
 }

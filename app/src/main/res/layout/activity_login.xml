@@ -54,7 +54,7 @@
         android:background="@drawable/button5_background"
         android:ems="10"
         android:hint="Password"
-        android:inputType="text"
+        android:inputType="textPassword"
         android:padding="10dp"
         android:textColor="#000000"
         android:textSize="24sp"

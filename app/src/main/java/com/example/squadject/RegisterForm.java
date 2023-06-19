@@ -3,6 +3,7 @@ package com.example.squadject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.view.View;
@@ -196,6 +197,7 @@ public class RegisterForm extends AppCompatActivity {
                                             // User registration successful
                                             FirebaseUser user = mAuth.getCurrentUser();
                                             addUserToDatabase(user, phoneNumber, fullName, email, college, semester, branch, skills);
+                                            startActivity(new Intent(RegisterForm.this, HomeForm.class));
                                         } else {
                                             // User registration failed
                                             Toast.makeText(RegisterForm.this, "User registration failed", Toast.LENGTH_SHORT).show();
