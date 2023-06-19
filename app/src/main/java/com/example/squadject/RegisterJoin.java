@@ -216,8 +216,8 @@ public class RegisterJoin extends AppCompatActivity {
         DatabaseReference userRef = databaseRef.child(phoneNumber);
 
         // Set the registration data as key-value pairs under the userRef
-        userRef.child("Full_Name").setValue(fullName);
-        userRef.child("Phone_Number").setValue(phoneNumber);
+        userRef.child("Full name").setValue(fullName);
+        userRef.child("Phone number").setValue(phoneNumber);
         userRef.child("Email").setValue(email);
         userRef.child("College").setValue(college);
         userRef.child("Semester").setValue(semester);

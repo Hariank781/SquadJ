@@ -37,4 +37,8 @@ public class login_register extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public void onBackPressed() {
+        // Do nothing to disable the back button
+    }
 }

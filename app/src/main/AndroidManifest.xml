@@ -15,6 +15,18 @@
         android:theme="@style/Theme.Squadject"
         tools:targetApi="31">
         <activity
+            android:name=".MatchJoin"
+            android:exported="false" />
+        <activity
+            android:name=".MatchForm"
+            android:exported="false" />
+        <activity
+            android:name=".HomeJoin"
+            android:exported="false" />
+        <activity
+            android:name=".RegisterForm"
+            android:exported="false" />
+        <activity
             android:name=".RegisterJoin"
             android:exported="false" />
         <activity
@@ -27,7 +39,7 @@
             android:name=".login_register"
             android:exported="false" />
         <activity
-            android:name=".RegisterForm"
+            android:name=".HomeForm"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
