@@ -107,20 +107,20 @@ public class Login extends AppCompatActivity {
         }
 
         // Create a new user with the provided email and password
-        firebaseAuth.createUserWithEmailAndPassword(email, password)
+        firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // User registration successful
-                            Toast.makeText(Login.this, "User registration successful", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, "User login successful", Toast.LENGTH_SHORT).show();
 
                             // Redirect to the join team activity or perform further actions
                             // For example, you can start a new activity:
                             startActivity(new Intent(Login.this, HomeJoin.class));
                         } else {
                             // User registration failed
-                            Toast.makeText(Login.this, "User registration failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, "User login failed", Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
