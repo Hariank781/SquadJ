@@ -215,7 +215,7 @@ public class RegisterJoin extends AppCompatActivity {
                                             // User registration successful
                                             FirebaseUser user = mAuth.getCurrentUser();
                                             addUserToDatabase(user, phoneNumber, fullName, email, college, semester, branch, skills, profilePicUri);
-                                            startActivity(new Intent(RegisterJoin.this, HomeForm.class));
+                                            startActivity(new Intent(RegisterJoin.this, HomeJoin.class));
                                         } else {
                                             // User registration failed
                                             Toast.makeText(RegisterJoin.this, "User registration failed", Toast.LENGTH_SHORT).show();
