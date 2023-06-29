@@ -93,7 +93,6 @@ public class RegisterJoin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String fullName = nameText.getText().toString();
-                String phoneNumber = phoneText.getText().toString();
                 String email = emailText.getText().toString();
                 String college = collegeText.getText().toString();
                 String semester = semesterText.getText().toString();
@@ -103,7 +102,7 @@ public class RegisterJoin extends AppCompatActivity {
                 String rePassword = repasswordText.getText().toString();
 
                 // Check if all fields are filled
-                if (fullName.isEmpty() || phoneNumber.isEmpty() || email.isEmpty() || college.isEmpty()
+                if (fullName.isEmpty() || email.isEmpty() || college.isEmpty()
                         || semester.isEmpty() || branch.isEmpty() || skills.isEmpty() || password.isEmpty() || rePassword.isEmpty()) {
                     Toast.makeText(RegisterJoin.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
                     return;
@@ -127,26 +126,28 @@ public class RegisterJoin extends AppCompatActivity {
                     return;
                 }
 
-                // Check if email is in the correct format
+                // Check if email is in the correct Format
                 if (!isValidEmail(email)) {
                     Toast.makeText(RegisterJoin.this, "Invalid email format", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // Check if password is in the correct format
+                // Check if password is in the correct Format
                 if (!isValidPassword(password)) {
                     Toast.makeText(RegisterJoin.this, "Password must be at least 8 characters long", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 // Check if phone number is exactly 10 digits long
-                if (!isValidPhoneNumber(phoneNumber)) {
+                if (!isValidPhoneNumber(phoneText.getText().toString())) {
                     Toast.makeText(RegisterJoin.this, "Phone number must be exactly 10 digits long", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                // Check if phone number is unique in the database
-                checkPhoneNumberUniqueness(phoneNumber, fullName, email, college, semester, branch, skills, password);
+                // Remove the check for phone number uniqueness
+
+                // Proceed with registration
+                registerUser(email, password, fullName, college, semester, branch, skills);
             }
         });
     }
@@ -164,7 +165,7 @@ public class RegisterJoin extends AppCompatActivity {
     }
 
     private boolean isValidPassword(String password) {
-        // Add your password format validation logic here
+        // Add your password Format validation logic here
         return password.length() >= 8;
     }
 
@@ -172,29 +173,7 @@ public class RegisterJoin extends AppCompatActivity {
         return phoneNumber.length() == 10;
     }
 
-    private void checkPhoneNumberUniqueness(final String phoneNumber, final String fullName, final String email, final String college,
-                                            final String semester, final String branch, final String skills, final String password) {
-        databaseRef.child(phoneNumber).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    // Phone number already exists in the database, show error toast
-                    Toast.makeText(RegisterJoin.this, "Phone number already exists", Toast.LENGTH_SHORT).show();
-                } else {
-                    // Phone number does not exist, proceed with registration
-                    registerUser(email, password, phoneNumber, fullName, college, semester, branch, skills);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Error occurred while checking phone number uniqueness
-                Toast.makeText(RegisterJoin.this, "Error checking phone number uniqueness", Toast.LENGTH_SHORT).show();
-            }
-        });
-    }
-
-    private void registerUser(String email, String password, final String phoneNumber, final String fullName, final String college,
+    private void registerUser(String email, String password, final String fullName, final String college,
                               final String semester, final String branch, final String skills) {
         // Check if the email already exists in Firebase Authentication
         mAuth.fetchSignInMethodsForEmail(email).addOnCompleteListener(new OnCompleteListener<SignInMethodQueryResult>() {
@@ -214,7 +193,7 @@ public class RegisterJoin extends AppCompatActivity {
                                         if (task.isSuccessful()) {
                                             // User registration successful
                                             FirebaseUser user = mAuth.getCurrentUser();
-                                            addUserToDatabase(user, phoneNumber, fullName, email, college, semester, branch, skills, profilePicUri);
+                                            addUserToDatabase(user, fullName, email, college, semester, branch, skills, profilePicUri);
                                             startActivity(new Intent(RegisterJoin.this, HomeJoin.class));
                                         } else {
                                             // User registration failed
@@ -231,13 +210,13 @@ public class RegisterJoin extends AppCompatActivity {
         });
     }
 
-    private void addUserToDatabase(FirebaseUser user, String phoneNumber, String fullName, String email, String college,
-                                   String semester, String branch, String skills, Uri profilePicUri) {
-        DatabaseReference userRef = databaseRef.child(phoneNumber);
+    private void addUserToDatabase(FirebaseUser user, String fullName, String email,
+                                   String college, String semester, String branch, String skills, Uri profilePicUri) {
+        DatabaseReference userRef = databaseRef.child(email.replace(".", ","));
 
         // Set the registration data as key-value pairs under the userRef
         userRef.child("Full name").setValue(fullName);
-        userRef.child("Phone number").setValue(phoneNumber);
+        userRef.child("Phone number").setValue(phoneText.getText().toString());
         userRef.child("Email").setValue(email);
         userRef.child("College").setValue(college);
         userRef.child("Semester").setValue(semester);
@@ -245,7 +224,7 @@ public class RegisterJoin extends AppCompatActivity {
         userRef.child("Skills").setValue(skills);
 
         StorageReference profilePicRef = FirebaseStorage.getInstance().getReference().child("profile_pictures")
-                .child(user.getUid() + ".png");
+                .child(email.replace(".", ",") + ".png");
 
         profilePicRef.putFile(profilePicUri)
                 .addOnSuccessListener(taskSnapshot -> {
@@ -259,6 +238,7 @@ public class RegisterJoin extends AppCompatActivity {
                     // Profile picture upload failed
                     Toast.makeText(RegisterJoin.this, "Failed to upload profile picture", Toast.LENGTH_SHORT).show();
                 });
+
         // Optional: Display a success toast message
         Toast.makeText(RegisterJoin.this, "User registration successful", Toast.LENGTH_SHORT).show();
     }
