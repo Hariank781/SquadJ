@@ -2,6 +2,7 @@ package com.example.squadject;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,12 +13,15 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+// FormAdapter.java
 public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
 
     private List<FormItem> formItems;
+    private OnInviteClickListener inviteClickListener;
 
-    public FormAdapter(List<FormItem> formItems) {
+    public FormAdapter(List<FormItem> formItems, OnInviteClickListener inviteClickListener) {
         this.formItems = formItems;
+        this.inviteClickListener = inviteClickListener;
     }
 
     @NonNull
@@ -38,6 +42,10 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
         return formItems.size();
     }
 
+    public interface OnInviteClickListener {
+        void onInviteClick(String email);
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView imageView;
         private TextView nameTextView;
@@ -47,6 +55,7 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
         private TextView branchTextView;
         private TextView semesterTextView;
         private TextView skillsTextView;
+        private Button sendInviteButton;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -58,10 +67,19 @@ public class FormAdapter extends RecyclerView.Adapter<FormAdapter.ViewHolder> {
             branchTextView = itemView.findViewById(R.id.branchFJ);
             semesterTextView = itemView.findViewById(R.id.semesterFJ);
             skillsTextView = itemView.findViewById(R.id.skillsFJ);
+            sendInviteButton = itemView.findViewById(R.id.sendInvite);
+
+            sendInviteButton.setOnClickListener(v -> {
+                int position = getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION) {
+                    FormItem item = formItems.get(position);
+                    String email = item.getEmail();
+                    inviteClickListener.onInviteClick(email);
+                }
+            });
         }
 
         public void bind(FormItem item) {
-            // Set data to views here
             Picasso.get().load(item.getProfilePicture()).into(imageView);
             nameTextView.setText(item.getFullName());
             emailTextView.setText(item.getEmail());

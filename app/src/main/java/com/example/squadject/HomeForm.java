@@ -3,6 +3,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
@@ -17,7 +19,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class HomeForm extends AppCompatActivity {
+public class HomeForm extends AppCompatActivity implements FormAdapter.OnInviteClickListener {
     private BottomNavigationView bottomNavigationView;
     private RecyclerView recyclerView;
     private FormAdapter formAdapter;
@@ -28,9 +30,9 @@ public class HomeForm extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_form);
 
-        Intent inten = getIntent();
-        if (inten != null && inten.hasExtra("emailID")) {
-            emailID = inten.getStringExtra("emailID");
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra("emailID")) {
+            emailID = intent.getStringExtra("emailID");
         }
 
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
@@ -75,7 +77,7 @@ public class HomeForm extends AppCompatActivity {
                     FormItem formItem = new FormItem(profilePicture, fullName, email, phoneNumber, college, branch, semester, skills);
                     formItems.add(formItem);
                 }
-                formAdapter = new FormAdapter(formItems);
+                formAdapter = new FormAdapter(formItems, HomeForm.this);
                 recyclerView.setAdapter(formAdapter);
             }
 
@@ -84,6 +86,22 @@ public class HomeForm extends AppCompatActivity {
                 // Handle database error if needed
             }
         });
+    }
+
+    @Override
+    public void onInviteClick(String email) {
+        storeEmailInFirebase(email);
+    }
+
+    private void storeEmailInFirebase(String email) {
+        DatabaseReference teamRef = FirebaseDatabase.getInstance().getReference().child("Form_Team").child(emailID);
+        teamRef.child("Teammate email").setValue(email)
+                .addOnSuccessListener(aVoid -> {
+                    Toast.makeText(HomeForm.this, "Email stored in Firebase", Toast.LENGTH_SHORT).show();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(HomeForm.this, "Failed to store email", Toast.LENGTH_SHORT).show();
+                });
     }
 
     @Override
