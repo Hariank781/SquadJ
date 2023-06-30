@@ -39,7 +39,9 @@ public class HomeJoin extends AppCompatActivity implements JoinAdapter.OnInviteC
         bottomNavigationView.setSelectedItemId(R.id.menu_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.menu_matches) {
-                startActivity(new Intent(HomeJoin.this, MatchJoin.class));
+                Intent intentJoin = new Intent(HomeJoin.this, MatchJoin.class);
+                intentJoin.putExtra("joinKey", emailID);
+                startActivity(intentJoin);
                 return true;
             } else if (item.getItemId() == R.id.menu_home) {
                 return true;

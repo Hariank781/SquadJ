@@ -7,11 +7,15 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MatchJoin extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
+    private String joinKey;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_match_join);
+        Intent intentJoin = getIntent();
+        if (intentJoin != null && intentJoin.hasExtra("joinKey")) {
+            joinKey = intentJoin.getStringExtra("joinKey"); }
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.menu_matches);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {

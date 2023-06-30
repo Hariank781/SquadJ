@@ -39,7 +39,9 @@ public class HomeForm extends AppCompatActivity implements FormAdapter.OnInviteC
         bottomNavigationView.setSelectedItemId(R.id.menu_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.menu_matches) {
-                startActivity(new Intent(HomeForm.this, MatchForm.class));
+                Intent intentForm = new Intent(HomeForm.this, MatchForm.class);
+                intentForm.putExtra("formKey", emailID);
+                startActivity(intentForm);
                 return true;
             } else if (item.getItemId() == R.id.menu_home) {
                 return true;
