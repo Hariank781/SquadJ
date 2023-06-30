@@ -23,12 +23,19 @@ public class HomeJoin extends AppCompatActivity {
     private RecyclerView recyclerView;
 
     private JoinAdapter joinAdapter;
+    private String emailID;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_join);
+
+        Intent inten = getIntent();
+        if (inten != null && inten.hasExtra("emailID")) {
+            emailID = inten.getStringExtra("emailID");
+        }
+
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.menu_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {

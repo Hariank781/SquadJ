@@ -194,7 +194,9 @@ public class RegisterForm extends AppCompatActivity {
                                             // User registration successful
                                             FirebaseUser user = mAuth.getCurrentUser();
                                             addUserToDatabase(user, fullName, email, college, semester, branch, skills, profilePicUri);
-                                            startActivity(new Intent(RegisterForm.this, HomeForm.class));
+                                            Intent intent = new Intent(RegisterForm.this, HomeForm.class);
+                                            intent.putExtra("emailID", email.replace(".", ","));
+                                            startActivity(intent);
                                         } else {
                                             // User registration failed
                                             Toast.makeText(RegisterForm.this, "User registration failed", Toast.LENGTH_SHORT).show();

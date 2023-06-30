@@ -21,11 +21,18 @@ public class HomeForm extends AppCompatActivity {
     private BottomNavigationView bottomNavigationView;
     private RecyclerView recyclerView;
     private FormAdapter formAdapter;
+    private String emailID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_form);
+
+        Intent inten = getIntent();
+        if (inten != null && inten.hasExtra("emailID")) {
+            emailID = inten.getStringExtra("emailID");
+        }
+
         bottomNavigationView = findViewById(R.id.bottomNavigationView);
         bottomNavigationView.setSelectedItemId(R.id.menu_home);
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {

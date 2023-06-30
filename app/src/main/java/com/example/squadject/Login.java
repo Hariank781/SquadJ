@@ -75,6 +75,8 @@ public class Login extends AppCompatActivity {
             return;
         }
 
+        String emailID = email.replace(".", ",");
+
         // Sign in the user with the provided email and password
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
@@ -86,7 +88,9 @@ public class Login extends AppCompatActivity {
 
                             // Redirect to the form team activity or perform further actions
                             // For example, you can start a new activity:
-                            startActivity(new Intent(Login.this, HomeForm.class));
+                            Intent intent = new Intent(Login.this, HomeForm.class);
+                            intent.putExtra("emailID", emailID);
+                            startActivity(intent);
                         } else {
                             // User login failed
                             Toast.makeText(Login.this, "User login failed", Toast.LENGTH_SHORT).show();
@@ -106,6 +110,8 @@ public class Login extends AppCompatActivity {
             return;
         }
 
+        String emailID = email.replace(".", ",");
+
         // Create a new user with the provided email and password
         firebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
@@ -117,7 +123,9 @@ public class Login extends AppCompatActivity {
 
                             // Redirect to the join team activity or perform further actions
                             // For example, you can start a new activity:
-                            startActivity(new Intent(Login.this, HomeJoin.class));
+                            Intent intent = new Intent(Login.this, HomeJoin.class);
+                            intent.putExtra("emailID", emailID);
+                            startActivity(intent);
                         } else {
                             // User registration failed
                             Toast.makeText(Login.this, "User login failed", Toast.LENGTH_SHORT).show();
