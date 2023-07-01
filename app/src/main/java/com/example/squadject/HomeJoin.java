@@ -73,7 +73,7 @@ public class HomeJoin extends AppCompatActivity implements JoinAdapter.OnInviteC
                     String college = snapshot.child("College").getValue(String.class);
                     String semester = snapshot.child("Semester").getValue(String.class);
                     String branch = snapshot.child("Branch").getValue(String.class);
-                    String skills = snapshot.child("Skills").getValue(String.class);
+                    String skills = snapshot.child("Skills needed for the project").getValue(String.class);
                     String profilePicture = snapshot.child("Profile picture").getValue(String.class);
 
                     JoinItem joinItem = new JoinItem(profilePicture, fullName, email, phoneNumber, college, branch, semester, skills);
